@@ -16,7 +16,19 @@ API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite").strip()
 
 app = Flask(__name__)
-CORS(app)
+# Allow local testing plus the production site and preview URLs created by Vercel.
+CORS(
+    app,
+    resources={
+        r"/*": {
+            "origins": [
+                r"http://localhost(:\d+)?",
+                r"http://127\.0\.0\.1(:\d+)?",
+                r"https://.*\.vercel\.app",
+            ]
+        }
+    },
+)
 
 
 def no_cache_response(file_name: str):
